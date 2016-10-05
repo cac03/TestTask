@@ -13,6 +13,9 @@
             android:name=".provider.SongsProvider"
             android:exported="false" />
 
+        <!-- retrieves songs from the server -->
+        <service android:name=".service.PollSongsService" />
+
         <activity android:name=".songs.SongsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
