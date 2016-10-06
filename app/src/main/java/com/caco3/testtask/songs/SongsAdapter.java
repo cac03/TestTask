@@ -131,7 +131,12 @@ public class SongsAdapter extends AutoFitRecyclerView.Adapter<SongsAdapter.ViewH
                     notifyItemRemoved(adapterListIdx);
                 } else if (sSongByIdComparator.compare(mItems.get(adapterListIdx), items.get(newListIdx)) == 0) {
                     // current items in the adapter's list and in the new list
-                    // have the same id. Skip this items
+                    // have the same id. Update item (id may stay the same, but other song fields may change)
+                    if (!mItems.get(adapterListIdx).equals(items.get(newListIdx))) {
+                        mItems.set(adapterListIdx, items.get(newListIdx));
+                        notifyItemChanged(adapterListIdx);
+                    }
+                    // analyse next items
                     newListIdx++;
                     adapterListIdx++;
                 } else {
@@ -157,8 +162,9 @@ public class SongsAdapter extends AutoFitRecyclerView.Adapter<SongsAdapter.ViewH
                 // which are not present in the new list
                 // so we have to delete them
                 while (sSongByIdComparator.compare(mItems.get(mItems.size() - 1), items.get(items.size() - 1)) > 0) {
-                    mItems.remove(mItems.size() - 1);
-                    notifyItemRemoved(mItems.size() - 1);
+                    int removedItemPosition = mItems.size() - 1;
+                    mItems.remove(removedItemPosition);
+                    notifyItemRemoved(removedItemPosition);
                 }
             }
 
