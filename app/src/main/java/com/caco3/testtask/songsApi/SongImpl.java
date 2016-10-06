@@ -6,11 +6,22 @@ import org.json.JSONObject;
 /**
  * {@link Song} implementation
  */
-/* package */ final class SongImpl implements Song {
+// TODO: 10/6/16 Access for this class must be package-private
+public final class SongImpl implements Song {
     private String author;
     private String name;
     private long id;
     private int version;
+
+    public SongImpl(){
+
+    }
+    public SongImpl(String author, String name, long id, int version) {
+        this.author = author;
+        this.name = name;
+        this.id = id;
+        this.version = version;
+    }
 
     @Override
     public String getAuthor() {

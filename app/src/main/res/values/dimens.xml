@@ -2,4 +2,12 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- Dimensions related to the songs recycler view -->
+    <dimen name="min_song_item_width">180dp</dimen>
+    <dimen name="song_item_margin">8dp</dimen>
+    <dimen name="song_item_padding">16dp</dimen>
+    <dimen name="song_author_wrap_height">74dp</dimen>
+    <dimen name="song_name_wrap_height">74dp</dimen>
+
 </resources>

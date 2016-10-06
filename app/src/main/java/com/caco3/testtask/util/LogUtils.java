@@ -39,7 +39,7 @@ public class LogUtils {
         }
     }
 
-    private static void LOGD(String tag, String msg){
+    public static void LOGD(String tag, String msg){
         if (LOGGING_ENABLED){
             Log.d(tag, msg);
         }
