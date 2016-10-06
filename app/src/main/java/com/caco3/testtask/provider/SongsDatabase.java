@@ -44,6 +44,6 @@ public class SongsDatabase extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         LOGI(TAG, "onUpgrade()");
-        db.execSQL("DROP TABLE IF NOT EXISTS " + Songs.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + Songs.TABLE_NAME);
     }
 }

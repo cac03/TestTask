@@ -43,7 +43,7 @@ import java.util.concurrent.TimeUnit;
             // prepare connection
             connection.setRequestMethod("GET");
             connection.setConnectTimeout(CONNECTION_TIMEOUT);
-            connection.setDoOutput(true);
+            connection.setDoInput(true);
 
             br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             StringBuilder sb = new StringBuilder();
