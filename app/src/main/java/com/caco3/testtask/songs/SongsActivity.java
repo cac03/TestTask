@@ -31,6 +31,19 @@ public class SongsActivity extends AppCompatActivity
     private static final String TAG = makeLogTag(SongsActivity.class);
 
     /**
+     * Key for boolean in {@link Bundle} filling when {@link #onSaveInstanceState(Bundle)}
+     * called and received when {@link #onCreate(Bundle)} called
+     *
+     * Represents whether the {@link #mSwipeRefreshLayout} was
+     * refreshing when {@link #onSaveInstanceState(Bundle)} was called.
+     *
+     * Helps to restore {@link #mSwipeRefreshLayout} state when {@link #onCreate(Bundle)}
+     * called
+     */
+    private static final String STATE_SWIPE_REFRESH_LAYOUT_REFRESHING
+            = "swrl_refreshing";
+
+    /**
      * Allow user to trigger manual update
      */
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -53,6 +66,12 @@ public class SongsActivity extends AppCompatActivity
     private Intent mPollDataIntent = null;
 
     /**
+     * Keep track of running task updating {@link #mSongsAutoFitRecyclerView}
+     * so we can cancel it. When this activity is about to be destroyed
+     */
+    private UpdateSongsViewTask mUpdateSongsViewTask = null;
+
+    /**
      * Receives result intents from {@link PollSongsService}.
      * And performs ui operations depending on result returned
      * by the service
@@ -65,7 +84,8 @@ public class SongsActivity extends AppCompatActivity
             LOGI(TAG, "Received intent with action " + action);
             // check result
             if (PollSongsService.isResultOk(intent)){
-                mSongsAdapter.updateItems(SongsHelper.getSongs(SongsActivity.this));
+                mUpdateSongsViewTask = new UpdateSongsViewTask();
+                mUpdateSongsViewTask.execute();
             } else if (PollSongsService.isNetworkErrorOccurred(intent)){
                 Toast.makeText(SongsActivity.this,
                         getString(R.string.unable_to_retrieve_songs_no_network), Toast.LENGTH_SHORT)
@@ -75,8 +95,6 @@ public class SongsActivity extends AppCompatActivity
             } else if (PollSongsService.isUnknownErrorOccurred(intent)){
                 Toast.makeText(SongsActivity.this, getString(R.string.unknown_error_occurred), Toast.LENGTH_SHORT).show();
             }
-            // Stop refreshing
-            mSwipeRefreshLayout.setRefreshing(false);
 
             mPollDataIntent = null;
         }
@@ -88,9 +106,26 @@ public class SongsActivity extends AppCompatActivity
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.songs_refresh_layout);
         mSwipeRefreshLayout.setOnRefreshListener(this);
+        // restore state
+        if (savedInstanceState != null){
+            // orientation changed e.g.
+            if (savedInstanceState.getBoolean(STATE_SWIPE_REFRESH_LAYOUT_REFRESHING)){
+                // app was refreshing data when orientation was changed.
+                mSwipeRefreshLayout.setRefreshing(true);
+            }
+        }
         setupSongsRecyclerView();
 
         registerBroadcastReceivers();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        /**
+         * Save {@link #mSwipeRefreshLayout} refreshing state
+         */
+        outState.putBoolean(STATE_SWIPE_REFRESH_LAYOUT_REFRESHING, mSwipeRefreshLayout.isRefreshing());
     }
 
     /**
@@ -115,6 +150,10 @@ public class SongsActivity extends AppCompatActivity
     @Override
     public void onDestroy(){
         unregisterBroadcastReceivers();
+        if (mUpdateSongsViewTask != null){
+            LOGD(TAG, "UpdateSongsViewTask canceled");
+            mUpdateSongsViewTask.cancel(true);
+        }
         super.onDestroy();
     }
 
@@ -122,7 +161,7 @@ public class SongsActivity extends AppCompatActivity
      * Asynchronously performs retrieving {@link Song}s from {@link com.caco3.testtask.provider.SongsDatabase}
      * and updates {@link #mSongsAutoFitRecyclerView} with retrieved items
      */
-    private class PopulateSongsRecyclerView extends AsyncTask<Void, Void, List<Song>>{
+    private class UpdateSongsViewTask extends AsyncTask<Void, Void, List<Song>>{
         @Override
         protected List<Song> doInBackground(Void... params){
             return SongsHelper.getSongs(SongsActivity.this);
@@ -131,6 +170,11 @@ public class SongsActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(List<Song> result){
             mSongsAdapter.updateItems(result);
+
+            // Stop refreshing
+            mSwipeRefreshLayout.setRefreshing(false);
+
+            mUpdateSongsViewTask = null;
         }
     }
 
@@ -175,6 +219,7 @@ public class SongsActivity extends AppCompatActivity
                         margin);
             }
         });
-        new PopulateSongsRecyclerView().execute();
+        mUpdateSongsViewTask = new UpdateSongsViewTask();
+        mUpdateSongsViewTask.execute();
     }
 }
