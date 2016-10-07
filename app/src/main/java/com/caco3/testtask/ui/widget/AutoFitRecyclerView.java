@@ -7,6 +7,11 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
 /**
+ * Represents {@link RecyclerView} which automatically
+ * calculates how much items it can hold in one row and holds them.
+ * Minimum width of item might be set using {@code android:columnWidth}
+ * attribute in the xml layout.
+ *
  * {@see http://blog.sqisland.com/2014/12/recyclerview-autofit-grid.html}
  */
 public class AutoFitRecyclerView extends RecyclerView {

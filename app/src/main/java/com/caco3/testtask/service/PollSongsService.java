@@ -21,7 +21,7 @@ public class PollSongsService extends IntentService {
 
     /**
      * Used to construct {@link Intent} to trigger BroadcastReceivers
-     * subscriber for this action
+     * subscribed for this action
      */
     public static final String ACTION = PollSongsService.class.getCanonicalName() + ".PollDataCompleted";
 

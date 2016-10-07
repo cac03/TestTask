@@ -47,7 +47,7 @@ public final class Song {
      * @return {@link Song} created from provided json
      * @throws JSONException if invalid json was provided
      */
-    public static Song fromJson(JSONObject json) throws JSONException{
+    /* package */static Song fromJson(JSONObject json) throws JSONException{
         String name = json.getString("label");
         String author = json.getString("author");
         long id = json.getLong("id");

@@ -45,7 +45,7 @@ public class SongsActivity extends BaseActivity
             = "swrl_refreshing";
 
     /**
-     * Allow user to trigger manual update
+     * Allows user to trigger manual update
      */
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -142,7 +142,6 @@ public class SongsActivity extends BaseActivity
             /**
              * we're already running one
              */
-            mSwipeRefreshLayout.setRefreshing(false);
             return;
         }
         if (NetworkUtils.isNetworkAvailable(this)) {
@@ -225,7 +224,7 @@ public class SongsActivity extends BaseActivity
     }
 
     /**
-     * Registers {@link #mOnDataPollCompletedBr}
+     * Unregisters {@link #mOnDataPollCompletedBr}
      */
     private void unregisterBroadcastReceivers(){
         LocalBroadcastManager broadcastManager

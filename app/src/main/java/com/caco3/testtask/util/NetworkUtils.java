@@ -9,6 +9,11 @@ public class NetworkUtils {
         throw new AssertionError(NetworkUtils.class.getName() + " not intended to be instantiated");
     }
 
+    /**
+     * Tests whether network is available
+     * @param context to get {@link ConnectivityManager}
+     * @return true if network available, false otherwise
+     */
     public static boolean isNetworkAvailable(Context context){
         ConnectivityManager connectivityManager =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

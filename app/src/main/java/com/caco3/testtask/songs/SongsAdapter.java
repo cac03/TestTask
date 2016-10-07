@@ -14,13 +14,11 @@ import com.caco3.testtask.ui.widget.AutoFitRecyclerView;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
-
 
 /**
  * Recycler view adapter for {@link SongsActivity}
  */
-public class SongsAdapter extends AutoFitRecyclerView.Adapter<SongsAdapter.ViewHolder> {
+/* package */class SongsAdapter extends AutoFitRecyclerView.Adapter<SongsAdapter.ViewHolder> {
     /**
      * Where this adapter was created
      */
@@ -46,8 +44,9 @@ public class SongsAdapter extends AutoFitRecyclerView.Adapter<SongsAdapter.ViewH
             R.color.brown_light};
 
     /**
-     * Used to compare {@link SongsAdapter#mItems} and list
-     * of songs in the {@link SongsAdapter#updateItems(List)} methods.
+     * Used to compare {@link Song} items to perform
+     * accurately updating items in this adapter
+     * {@see {@link #updateItems(List)}}
      */
     private static final Comparator<Song> sSongByIdComparator
             = new Comparator<Song>() {
@@ -67,7 +66,7 @@ public class SongsAdapter extends AutoFitRecyclerView.Adapter<SongsAdapter.ViewH
         }
     };
 
-    public SongsAdapter(Context context){
+    /* package */ SongsAdapter(Context context){
         this.mContext = context;
     }
 
@@ -102,9 +101,9 @@ public class SongsAdapter extends AutoFitRecyclerView.Adapter<SongsAdapter.ViewH
      * Called when this list of this items must be updated.
      * @param items list of items that must replace list in this adapter
      */
-    public void updateItems(List<Song> items){
+    /* package */ void updateItems(List<Song> items){
         if (mItems.isEmpty()){
-            // Adapter has no items in the list just add all
+            // Adapter has no items in the list. Just add all from new list
             for(int i = 0; i < items.size(); i++){
                 mItems.add(items.get(i));
                 notifyItemInserted(i);
@@ -121,7 +120,13 @@ public class SongsAdapter extends AutoFitRecyclerView.Adapter<SongsAdapter.ViewH
             // keeping sort order by song id.
 
             // something like merge procedure for mergeSort
-            // this part does its work for O(n^2)
+            // this part does its work with quadratic complexity
+
+            /**
+             * We can do this because lists of {@link Song} items
+             * in this adapter and passed to this method
+             * are already sorted by {@link Song#getId()}
+             */
 
             int newListIdx = 0;
             int adapterListIdx = 0;
