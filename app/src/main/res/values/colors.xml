@@ -3,10 +3,15 @@
     <color name="colorPrimary">#FF9800</color>
     <color name="colorPrimaryDark">#F57C00</color>
     <color name="colorAccent">#FFEB3B</color>
-    
-    <color name="deep_orange">#FF774C</color>
-    <color name="yellow">#FFEF5F</color>
-    <color name="green">#77CC7D</color>
-    <color name="indigo">#798EFE</color>
+
+    <!-- used for song items bg -->
+    <color name="deep_orange_light">#FF774C</color>
+    <color name="yellow_light">#FFEF5F</color>
+    <color name="green_light">#77CC7D</color>
+    <color name="indigo_light">#798EFE</color>
+    <color name="deep_purple_light">#6849B5</color>
+    <color name="teal_light">#42B2A6</color>
+    <color name="purple_light">#C671D5</color>
+    <color name="brown_light">#A47A6A</color>
 
 </resources>

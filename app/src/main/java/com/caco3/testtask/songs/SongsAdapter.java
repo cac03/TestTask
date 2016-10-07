@@ -40,10 +40,14 @@ public class SongsAdapter extends AutoFitRecyclerView.Adapter<SongsAdapter.ViewH
      * Color ids to select from to set background color to item
      */
     private static final int[] sColorIds = {
-            R.color.deep_orange,
-            R.color.green,
-            R.color.indigo,
-            R.color.yellow };
+            R.color.deep_orange_light,
+            R.color.green_light,
+            R.color.indigo_light,
+            R.color.yellow_light,
+            R.color.deep_purple_light,
+            R.color.teal_light,
+            R.color.purple_light,
+            R.color.brown_light};
 
     /**
      * Used to compare {@link SongsAdapter#mItems} and list
