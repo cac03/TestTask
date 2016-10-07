@@ -84,7 +84,7 @@ public class SongsActivity extends AppCompatActivity
             LOGI(TAG, "Received intent with action " + action);
             // check result
             if (PollSongsService.isResultOk(intent)){
-                mUpdateSongsViewTask = new UpdateSongsViewTask();
+                mUpdateSongsViewTask = new UpdateSongsViewTask(true /* stop refreshing */);
                 mUpdateSongsViewTask.execute();
             } else if (PollSongsService.isNetworkErrorOccurred(intent)){
                 Toast.makeText(SongsActivity.this,
@@ -162,9 +162,35 @@ public class SongsActivity extends AppCompatActivity
 
     /**
      * Asynchronously performs retrieving {@link Song}s from {@link com.caco3.testtask.provider.SongsDatabase}
-     * and updates {@link #mSongsAutoFitRecyclerView} with retrieved items
+     * and updates {@link #mSongsAutoFitRecyclerView} with retrieved items.
+     *
+     * We execute this in following cases:
+     * 1) We need to populate our {@link #mSongsAutoFitRecyclerView} when this activity is created.
+     * 2) We need to update view, when user triggered manual update using {@link #mSwipeRefreshLayout}
+     *
+     * Also we must control refreshing animation on {@link #mSwipeRefreshLayout}.
+     * It seems that we can just call setRefreshing(false) onPostExecute.
+     * But there arises a problem...
+     * When device orientation changed activity gets recreated. And if the app hasn't finished
+     * data updating, instance of this task created in {@link #setupSongsRecyclerView()}
+     * will clear refreshing animation.
+     * So we have to really know whether we have to call setRefreshing(false) onPostExecute.
+     * This problem solved by constructor with boolean parameter. If we really must call
+     * setRefreshing(false) instance must be created with 'true' parameter and 'false'
+     * otherwise.
      */
     private class UpdateSongsViewTask extends AsyncTask<Void, Void, List<Song>>{
+        private final boolean mNeedToStopRefreshingOnPostExecute;
+
+        /**
+         * @param needToStopRefreshingOnPostExecute if true, task will call setRefreshing(false)
+         *                                          in onPostExecute()
+         */
+        UpdateSongsViewTask(boolean needToStopRefreshingOnPostExecute){
+            this.mNeedToStopRefreshingOnPostExecute = needToStopRefreshingOnPostExecute;
+        }
+
+
         @Override
         protected List<Song> doInBackground(Void... params){
             return SongsHelper.getSongs(SongsActivity.this);
@@ -174,9 +200,10 @@ public class SongsActivity extends AppCompatActivity
         protected void onPostExecute(List<Song> result){
             mSongsAdapter.updateItems(result);
 
-            // Stop refreshing
-            mSwipeRefreshLayout.setRefreshing(false);
-
+            // Stop refreshing if needed
+            if (mNeedToStopRefreshingOnPostExecute) {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
             mUpdateSongsViewTask = null;
         }
     }
@@ -222,7 +249,7 @@ public class SongsActivity extends AppCompatActivity
                         margin);
             }
         });
-        mUpdateSongsViewTask = new UpdateSongsViewTask();
+        mUpdateSongsViewTask = new UpdateSongsViewTask(false /* mustn't stop refreshing */);
         mUpdateSongsViewTask.execute();
     }
 }
