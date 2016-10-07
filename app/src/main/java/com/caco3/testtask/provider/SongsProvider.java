@@ -18,7 +18,7 @@ public class SongsProvider extends ContentProvider {
 
     private static final String SONG_TYPE = "com.caco3.testtask.datatype.song";
 
-    private static final String AUTHORITY = "com.caco3.testtask.songs";
+    public static final String AUTHORITY = "com.caco3.testtask.songs";
 
     private static final String BASE_PATH = "songs";
 

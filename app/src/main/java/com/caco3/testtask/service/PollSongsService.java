@@ -2,12 +2,10 @@ package com.caco3.testtask.service;
 
 import android.app.IntentService;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 
-import com.caco3.testtask.provider.SongsDatabase;
-import com.caco3.testtask.provider.SongsProvider;
+import com.caco3.testtask.songs.SongsHelper;
 import com.caco3.testtask.songsApi.Song;
 import com.caco3.testtask.songsApi.SongsApi;
 import com.caco3.testtask.songsApi.SongsApiException;
@@ -72,18 +70,8 @@ public class PollSongsService extends IntentService {
 
             try {
                 List<Song> songs = songsApi.getSongs();
-                ContentResolver contentResolver = getContentResolver();
-                // Clear entire table
-                contentResolver.delete(SongsProvider.CONTENT_URI, null, null);
-                // Save fetched songs to DB
-                for(Song s : songs){
-                    ContentValues contentValues = new ContentValues();
-                    contentValues.put(SongsDatabase.Songs.KEY_AUTHOR, s.getAuthor());
-                    contentValues.put(SongsDatabase.Songs.KEY_NAME, s.getName());
-                    contentValues.put(SongsDatabase.Songs.KEY_VERSION, s.getVersion());
-                    contentValues.put(SongsDatabase.Songs.KEY_SONG_ID, s.getId());
-                    contentResolver.insert(SongsProvider.CONTENT_URI, contentValues);
-                }
+                // Update songs in db
+                SongsHelper.updateSongsInDb(this, songs);
 
                 resultIntent.putExtra(EXTRA_RESULT, EXTRA_RESULT_OK);
             } catch (SongsApiException e){
