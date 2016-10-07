@@ -31,10 +31,6 @@ public class SongsAdapter extends AutoFitRecyclerView.Adapter<SongsAdapter.ViewH
      */
     private final List<Song> mItems = new ArrayList<>();
 
-    /**
-     * Used to set random background color of item
-     */
-    private static final Random sRandom = new Random();
 
     /**
      * Color ids to select from to set background color to item
@@ -88,9 +84,12 @@ public class SongsAdapter extends AutoFitRecyclerView.Adapter<SongsAdapter.ViewH
         Song song = mItems.get(position);
         holder.mAuthorView.setText(song.getAuthor());
         holder.mNameView.setText(song.getName());
+        /**
+         * set item background color depending on the {@link Song#hashCode()}
+         */
         holder.mWrapper.setBackgroundColor(
                 ResourcesCompat
-                        .getColor(mContext.getResources(), sColorIds[sRandom.nextInt(sColorIds.length)], null));
+                        .getColor(mContext.getResources(), sColorIds[Math.abs(song.hashCode()) % sColorIds.length], null));
 
     }
 
