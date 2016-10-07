@@ -19,6 +19,7 @@ import com.caco3.testtask.service.PollSongsService;
 import com.caco3.testtask.songsApi.Song;
 import com.caco3.testtask.ui.widget.AutoFitRecyclerView;
 import com.caco3.testtask.util.NetworkUtils;
+import com.caco3.testtask.util.UiUtils;
 
 import java.util.List;
 
@@ -115,6 +116,10 @@ public class SongsActivity extends AppCompatActivity
             }
         }
         setupSongsRecyclerView();
+        /**
+         * Apply color scheme for {@link #mSwipeRefreshLayout}
+         */
+        UiUtils.setColorsForSwipeRefreshLayout(mSwipeRefreshLayout);
 
         registerBroadcastReceivers();
     }
