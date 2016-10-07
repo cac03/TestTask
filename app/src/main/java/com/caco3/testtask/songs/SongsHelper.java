@@ -7,7 +7,6 @@ import android.database.Cursor;
 import com.caco3.testtask.provider.SongsDatabase;
 import com.caco3.testtask.provider.SongsProvider;
 import com.caco3.testtask.songsApi.Song;
-import com.caco3.testtask.songsApi.SongImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +42,7 @@ public class SongsHelper {
                 int versionIdx = cursor.getColumnIndex(SongsDatabase.Songs.KEY_VERSION);
 
                 do {
-                    Song song = new SongImpl(cursor.getString(authorIdx),
+                    Song song = new Song(cursor.getString(authorIdx),
                             cursor.getString(nameIdx),
                             cursor.getLong(idIdx),
                             cursor.getInt(versionIdx));

@@ -86,7 +86,7 @@ import java.util.concurrent.TimeUnit;
         int length = songsJsonArray.length();
         for(int i = 0; i < length; i++){
             JSONObject songJson = songsJsonArray.getJSONObject(i);
-            result.add(SongImpl.fromJson(songJson));
+            result.add(Song.fromJson(songJson));
         }
 
         return result;
