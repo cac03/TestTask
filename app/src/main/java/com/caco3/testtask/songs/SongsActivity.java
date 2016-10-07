@@ -22,6 +22,8 @@ import com.caco3.testtask.util.NetworkUtils;
 
 import java.util.List;
 
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
+
 import static com.caco3.testtask.util.LogUtils.*;
 
 public class SongsActivity extends AppCompatActivity
@@ -159,6 +161,7 @@ public class SongsActivity extends AppCompatActivity
      */
     private void setupSongsRecyclerView(){
         mSongsAutoFitRecyclerView = (AutoFitRecyclerView) findViewById(R.id.songs_recycler_view);
+        mSongsAutoFitRecyclerView.setItemAnimator(new SlideInUpAnimator());
         mSongsAdapter = new SongsAdapter(this);
         mSongsAutoFitRecyclerView.setAdapter(mSongsAdapter);
         // add margins
