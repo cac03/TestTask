@@ -137,6 +137,7 @@ public class SongsActivity extends AppCompatActivity
             /**
              * we're already running one
              */
+            mSwipeRefreshLayout.setRefreshing(false);
             return;
         }
         if (NetworkUtils.isNetworkAvailable(this)) {
@@ -144,6 +145,8 @@ public class SongsActivity extends AppCompatActivity
             startService(mPollDataIntent);
         } else {
             Toast.makeText(this, getString(R.string.unable_to_retrieve_songs_no_network), Toast.LENGTH_SHORT).show();
+            // stop refreshing
+            mSwipeRefreshLayout.setRefreshing(false);
         }
     }
 
