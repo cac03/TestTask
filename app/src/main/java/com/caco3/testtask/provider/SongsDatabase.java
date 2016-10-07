@@ -9,7 +9,7 @@ import static com.caco3.testtask.util.LogUtils.*;
 public class SongsDatabase extends SQLiteOpenHelper {
     private static final String TAG = makeLogTag(SongsDatabase.class);
 
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 3;
 
     private static final String DB_NAME = "songs.db";
 
@@ -37,7 +37,7 @@ public class SongsDatabase extends SQLiteOpenHelper {
                 + Songs.KEY_AUTHOR + " TEXT, "
                 + Songs.KEY_NAME + " TEXT, "
                 + Songs.KEY_VERSION + " INTEGER, "
-                + Songs.KEY_SONG_ID + " INTEGER"
+                + Songs.KEY_SONG_ID + " INTEGER UNIQUE"
                 + ")");
     }
 
@@ -45,5 +45,6 @@ public class SongsDatabase extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         LOGI(TAG, "onUpgrade()");
         db.execSQL("DROP TABLE IF EXISTS " + Songs.TABLE_NAME);
+        onCreate(db);
     }
 }
