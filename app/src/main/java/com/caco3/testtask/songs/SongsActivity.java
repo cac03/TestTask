@@ -8,7 +8,6 @@ import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -17,6 +16,7 @@ import android.widget.Toast;
 import com.caco3.testtask.R;
 import com.caco3.testtask.service.PollSongsService;
 import com.caco3.testtask.songsApi.Song;
+import com.caco3.testtask.ui.BaseActivity;
 import com.caco3.testtask.ui.widget.AutoFitRecyclerView;
 import com.caco3.testtask.util.NetworkUtils;
 import com.caco3.testtask.util.UiUtils;
@@ -27,7 +27,7 @@ import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 import static com.caco3.testtask.util.LogUtils.*;
 
-public class SongsActivity extends AppCompatActivity
+public class SongsActivity extends BaseActivity
         implements SwipeRefreshLayout.OnRefreshListener{
     private static final String TAG = makeLogTag(SongsActivity.class);
 
