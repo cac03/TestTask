@@ -57,9 +57,9 @@ public class SongsAdapter extends AutoFitRecyclerView.Adapter<SongsAdapter.ViewH
              * Can't delegate it to {@link Long#compare(long, long)}
              * since minApiLevel for this app is 15
              */
-            if (o1.getId() - o2.getId() < 0) {
+            if (o1.getId() < o2.getId()) {
                 return -1;
-            } else if (o1.getId() - o2.getId() > 0) {
+            } else if (o1.getId() > o2.getId()) {
                 return 1;
             } else {
                 return 0;
