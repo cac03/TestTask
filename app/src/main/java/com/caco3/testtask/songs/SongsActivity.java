@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
@@ -209,6 +210,22 @@ public class SongsActivity extends BaseActivity
         @Override
         protected void onPostExecute(List<Song> result){
             mSongsAdapter.updateItems(result);
+
+            /**
+             * If item was inserted at 0 position. RecyclerView
+             * will scroll to second row...
+             * {@see https://code.google.com/p/android/issues/detail?id=174227}
+             *
+             * Fix it...
+             */
+            GridLayoutManager gridLayoutManager
+                    = (GridLayoutManager)mSongsAutoFitRecyclerView.getLayoutManager();
+            int itemsPerRow = gridLayoutManager.getSpanCount();
+            int firstCompletelyVisibleItem = gridLayoutManager.findFirstCompletelyVisibleItemPosition();
+            if (firstCompletelyVisibleItem != -1
+                    && firstCompletelyVisibleItem < itemsPerRow){
+                mSongsAutoFitRecyclerView.scrollToPosition(0);
+            }
 
             // Stop refreshing if needed
             if (mNeedToStopRefreshingOnPostExecute) {
