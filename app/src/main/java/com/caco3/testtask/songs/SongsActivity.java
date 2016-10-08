@@ -87,14 +87,20 @@ public class SongsActivity extends BaseActivity
             if (PollSongsService.isResultOk(intent)){
                 mUpdateSongsViewTask = new UpdateSongsViewTask(true /* stop refreshing */);
                 mUpdateSongsViewTask.execute();
-            } else if (PollSongsService.isNetworkErrorOccurred(intent)){
-                Toast.makeText(SongsActivity.this,
-                        getString(R.string.unable_to_retrieve_songs_no_network), Toast.LENGTH_SHORT)
-                        .show();
-            } else if (PollSongsService.isJsonParseErrorOccurred(intent)){
-                Toast.makeText(SongsActivity.this, getString(R.string.unable_to_parse_server_response), Toast.LENGTH_SHORT).show();
-            } else if (PollSongsService.isUnknownErrorOccurred(intent)){
-                Toast.makeText(SongsActivity.this, getString(R.string.unknown_error_occurred), Toast.LENGTH_SHORT).show();
+            } else {
+                // Updating failed
+                // Refreshing animation will not be cleared.
+                // So we must clear it here
+                mSwipeRefreshLayout.setRefreshing(false);
+                if (PollSongsService.isNetworkErrorOccurred(intent)) {
+                    Toast.makeText(SongsActivity.this,
+                            getString(R.string.unable_to_retrieve_songs_no_network), Toast.LENGTH_SHORT)
+                            .show();
+                } else if (PollSongsService.isJsonParseErrorOccurred(intent)) {
+                    Toast.makeText(SongsActivity.this, getString(R.string.unable_to_parse_server_response), Toast.LENGTH_SHORT).show();
+                } else if (PollSongsService.isUnknownErrorOccurred(intent)) {
+                    Toast.makeText(SongsActivity.this, getString(R.string.unknown_error_occurred), Toast.LENGTH_SHORT).show();
+                }
             }
 
             mPollDataIntent = null;
