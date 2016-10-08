@@ -12,6 +12,7 @@ import com.caco3.testtask.songsApi.Song;
 import com.caco3.testtask.ui.widget.AutoFitRecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -56,10 +57,11 @@ import java.util.List;
              * Can't delegate it to {@link Long#compare(long, long)}
              * since minApiLevel for this app is 15
              */
+            // From the greatest id to the lowest id
             if (o1.getId() < o2.getId()) {
-                return -1;
+                return (-1) * -1;
             } else if (o1.getId() > o2.getId()) {
-                return 1;
+                return (-1) * 1;
             } else {
                 return 0;
             }
@@ -102,6 +104,8 @@ import java.util.List;
      * @param items list of items that must replace list in this adapter
      */
     /* package */ void updateItems(List<Song> items){
+        // sort items by id from the greatest to the lowest
+        Collections.sort(items, sSongByIdComparator);
         if (mItems.isEmpty()){
             // Adapter has no items in the list. Just add all from new list
             for(int i = 0; i < items.size(); i++){
